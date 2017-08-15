@@ -1,0 +1,47 @@
+import java.io.*;
+class RemoveSpace{
+	public static void main(String args[]){
+		if(args.length<1){
+			System.out.print("File not known");
+			System.exit(0);
+		}
+		if(args.length>1){
+			System.out.print("Too many files");
+			System.exit(0);
+		}
+		File f = new File(args[0]);
+		if(!f.exists()){
+			System.out.print("Source file \""+args[0]+"\" does not exist");
+			System.exit(0);
+		}
+		try{
+			FileInputStream fis = new FileInputStream(f);
+			File temp = new File("temp.txt");
+			FileOutputStream fos = new FileOutputStream(temp);
+		
+			int count_s=0;
+			int ch;
+			char c;
+			while((ch=fis.read())!=-1){
+				c = (char)ch;
+				if(Character.isWhitespace(c)){
+					count_s++;
+					if(count_s>1)
+						continue;
+				}
+				if(Character.isAlphabetic(c))
+					count_s=0;
+				fos.write(c);
+				
+			}
+			fis.close();
+			fos.close();
+			f.delete();
+			temp.renameTo(f);
+		}
+		catch(Exception e){
+			System.out.println("Error - "+e.getMessage());
+		}
+
+	}
+}
